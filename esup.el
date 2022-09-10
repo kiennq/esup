@@ -562,14 +562,15 @@ ARGS is a list of extra command line arguments to pass to Emacs."
 
 (defun esup-fontify-results (results)
   "Add Emacs-Lisp font-lock to each expression in RESULTS."
+  (cl-delete-if #'null results)
   (with-temp-buffer
     (emacs-lisp-mode)
     (cl-loop for result in results
              do
              (erase-buffer)
              (insert (slot-value result 'expression-string))
-         (font-lock-ensure)
-         (setf (slot-value result 'expression-string) (buffer-string)))
+             (font-lock-ensure)
+             (setf (slot-value result 'expression-string) (buffer-string)))
     results))
 
 (defun esup-read-result (start-point)
